@@ -79,7 +79,7 @@ export class TarefaRepository {
   
 
   findAll = async (): Promise<Tarefa[]> => {
-    const tarefas = await this.manager.find(Tarefa);
+    const tarefas = await this.manager.query("select * from tarefa");
     return tarefas;
   };
 
