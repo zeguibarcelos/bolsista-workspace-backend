@@ -7,11 +7,11 @@ import { Localidade } from "../entities/Localidade"
 
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: "bolsista-workspace-db.mysql.database.azure.com",
+    host: process.env.HOST,
     port: 3306,
-    username: "workspaceroot",
-    password: `$WOpgW%5a182`,
-    database: "bolsista-workspace",
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
     synchronize: true,
     logging: true,
     entities: [
@@ -22,10 +22,9 @@ export const AppDataSource = new DataSource({
         Tecnico
     ],
     migrations: [
-        "./src/database/migrations/*.ts"
+        // "./src/database/migrations/*.ts"
     ],
 })
-
 
 AppDataSource.initialize()
     .then(() => {

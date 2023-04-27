@@ -9,11 +9,11 @@ const Tecnico_1 = require("../entities/Tecnico");
 const Localidade_1 = require("../entities/Localidade");
 exports.AppDataSource = new typeorm_1.DataSource({
     type: "mysql",
-    host: "bolsista-workspace-db.mysql.database.azure.com",
+    host: process.env.HOST,
     port: 3306,
-    username: "workspaceroot",
-    password: `$WOpgW%5a182`,
-    database: "bolsista-workspace",
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
     synchronize: true,
     logging: true,
     entities: [
@@ -24,7 +24,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
         Tecnico_1.Tecnico
     ],
     migrations: [
-        "./src/database/migrations/*.ts"
+    // "./src/database/migrations/*.ts"
     ],
 });
 exports.AppDataSource.initialize()
