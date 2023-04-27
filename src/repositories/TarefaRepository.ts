@@ -1,17 +1,14 @@
 import { EntityManager, getManager, Repository } from "typeorm";
 import { Tarefa } from "../entities/Tarefa";
 
-
 export class TarefaRepository {
-
   private manager: EntityManager;
 
   constructor(manager: EntityManager) {
     this.manager = manager;
   }
 
-
-  create = async (teste: Tarefa): Promise<Tarefa> => {
+  create = async (teste: any): Promise<Tarefa> => {
     const newTarefa = await this.manager.save(Tarefa, teste);
     return newTarefa;
   };
@@ -19,25 +16,26 @@ export class TarefaRepository {
   update = async (id: number, tarefa: Tarefa): Promise<Tarefa> => {
     await this.manager.update(Tarefa, id, tarefa);
     const updatedTarefa = await this.manager.findOneOrFail(Tarefa, {
-        where: {
-          id_tarefa: id
-        }
-      })
+      where: {
+        id_tarefa: id,
+      },
+    });
 
     return updatedTarefa;
   };
 
   findById = async (id: number): Promise<Tarefa> => {
     const tarefa = await this.manager.findOneOrFail(Tarefa, {
-        where: {
-          id_tarefa: id
-        }
-      })
+      where: {
+        id_tarefa: id,
+      },
+    });
     return tarefa;
   };
 
   findByEventoId = async (eventoId: number): Promise<Tarefa[]> => {
-    const tarefas = await this.manager.query(`
+    const tarefas = await this.manager.query(
+      `
     SELECT 
       t.id_tarefa,
       t.descricao,
@@ -62,24 +60,36 @@ export class TarefaRepository {
       ) AS tecnicos
     FROM tarefa t
     WHERE t.eventoIdEvento = ?
-  `, [eventoId]);
-  
+  `,
+      [eventoId]
+    );
 
-  
     // Transformar os resultados em objetos Tarefa
 
-      return tarefas.map(tarefa => ({
-        ...tarefa,
-        tecnicos: tarefa.tecnicos ? JSON.parse(`${tarefa.tecnicos}`) : [],
-        componentes: tarefa.componentes ? JSON.parse(`${tarefa.componentes}`) : [],
-      }));
-
-    
-  }
-  
+    return tarefas.map((tarefa) => ({
+      ...tarefa,
+      tecnicos: tarefa.tecnicos ? JSON.parse(`${tarefa.tecnicos}`) : [],
+      componentes: tarefa.componentes
+        ? JSON.parse(`${tarefa.componentes}`)
+        : [],
+    }));
+  };
 
   findAll = async (): Promise<Tarefa[]> => {
     const tarefas = await this.manager.query("select * from tarefa");
+    return tarefas;
+  };
+
+  countAll = async (): Promise<Tarefa[]> => {
+    const tarefas = await this.manager
+      .query(`SELECT l.descricao as localidade, COUNT(DISTINCT e.id_evento) as quantidade_eventos
+    FROM localidade l
+    INNER JOIN localidade a ON l.id_localidade = a.id_localidade
+    INNER JOIN componente c ON a.id_localidade = c.localidadeIdLocalidade 
+    INNER JOIN tarefa_componentes_componente tc ON c.id_componente = tc.componenteIdComponente 
+    INNER JOIN tarefa t ON tc.tarefaIdTarefa  = t.id_tarefa
+    INNER JOIN evento e ON t.eventoIdEvento  = e.id_evento
+    GROUP BY l.descricao`);
     return tarefas;
   };
 

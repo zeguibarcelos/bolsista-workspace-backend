@@ -11,7 +11,8 @@ export class TarefaService {
     }
   
     create = async (tarefa: Tarefa): Promise<Tarefa> => {
-      const savedTarefa = await this.tarefaRepository.create(tarefa);
+      const lTarefa = new Tarefa(tarefa.descricao, tarefa.status, tarefa.evento, tarefa.tecnicos, tarefa.componentes)
+      const savedTarefa = await this.tarefaRepository.create(lTarefa);
       return savedTarefa;
     }
   
@@ -32,6 +33,11 @@ export class TarefaService {
   
     findAll = async (): Promise<Tarefa[]> => {
       const tarefas = await this.tarefaRepository.findAll();
+      return tarefas;
+    }
+
+    countAll = async (): Promise<Tarefa[]> => {
+      const tarefas = await this.tarefaRepository.countAll();
       return tarefas;
     }
   

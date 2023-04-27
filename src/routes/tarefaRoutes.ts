@@ -9,6 +9,7 @@
     tarefaRouter.get("/:id", tarefaController.findById);
     tarefaRouter.get("/evento/:id", tarefaController.findByEventoId);
     tarefaRouter.get("/", tarefaController.findAll);
+    tarefaRouter.get("/localidade/count", tarefaController.countAll);
     tarefaRouter.delete("/:id", tarefaController.deleteById);
 
     export default tarefaRouter;

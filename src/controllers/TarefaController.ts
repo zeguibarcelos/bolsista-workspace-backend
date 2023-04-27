@@ -64,6 +64,16 @@ export class TarefaController {
     }
   }
 
+  countAll = async (_req: Request, res: Response): Promise<Response> => {
+    try {
+      const tarefas = await this.tarefaService.countAll();
+      return res.json(tarefas);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
   deleteById = async (req: Request, res: Response): Promise<Response> => {
     try {
       const id = Number(req.params.id);
