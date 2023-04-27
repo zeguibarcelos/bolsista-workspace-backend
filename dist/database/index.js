@@ -7,9 +7,10 @@ const Evento_1 = require("../entities/Evento");
 const Tarefa_1 = require("../entities/Tarefa");
 const Tecnico_1 = require("../entities/Tecnico");
 const Localidade_1 = require("../entities/Localidade");
+require('dotenv').config();
 exports.AppDataSource = new typeorm_1.DataSource({
     type: "mysql",
-    host: process.env.HOST,
+    host: process.env.DB_HOST,
     port: 3306,
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
