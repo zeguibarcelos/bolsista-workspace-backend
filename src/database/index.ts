@@ -5,6 +5,10 @@ import { Tarefa } from "../entities/Tarefa"
 import { Tecnico } from "../entities/Tecnico"
 import { Localidade } from "../entities/Localidade"
 
+require('dotenv').config();
+
+
+
 export const AppDataSource = new DataSource({
     type: "mysql",
     host: process.env.DB_HOST,
